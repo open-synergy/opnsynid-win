@@ -43,3 +43,24 @@ class StockMove(models.Model):
                 move.product_uom_qty or 1.0
             res['price_unit'] = res['price_unit'] / uos_coeff
         return res
+
+    @api.model
+    def _create_invoice_line_from_vals(self, move, invoice_line_vals):
+        _super = super(StockMove, self)
+        invoice_line_id = _super._create_invoice_line_from_vals(
+            move, invoice_line_vals)
+        context = self.env.context
+        if context.get("inv_type") in ("out_invoice", "out_refund") and \
+                move.procurement_id and move.procurement_id.move_dest_id and \
+                move.procurement_id.move_dest_id.procurement_id and \
+                move.procurement_id.move_dest_id.procurement_id.sale_line_id:
+            sale_line = move.procurement_id.move_dest_id.\
+                procurement_id.sale_line_id
+            sale_line.write({
+                "invoice_lines": [(4, invoice_line_id)]
+            })
+            sale_line.order_id.write({
+                'invoice_ids': [(4, invoice_line_vals['invoice_id'])],
+            })
+
+        return invoice_line_id
