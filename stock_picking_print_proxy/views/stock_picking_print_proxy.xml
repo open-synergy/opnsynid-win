@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="assets_backend" name="stock_picking_print_proxy" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+          <script type="text/javascript" src="/stock_picking_print_proxy/static/src/js/print.js" />
+          <script type="text/javascript" src="/stock_picking_print_proxy/static/src/js/main.js" />
+      </xpath>
+    </template>
+
+    <record id="stock_picking_print_proxy_action" model="ir.actions.client">
+        <field name="name">Stock Picking Print Proxy Action</field>
+        <field name="tag">stock_picking_print_proxy</field>
+        <field name="context">{'picking_ids': [active_id]}</field>
+    </record>
+
+    <record id="stock_picking_view_form" model="ir.ui.view">
+        <field name="name">Inherit : Stock Picking Print Proxy</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <button name="%(stock_picking_print_proxy_action)d" string="Delivery Orders" type="action" icon="gtk-print" states="assigned,done"/>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>
