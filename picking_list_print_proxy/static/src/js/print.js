@@ -1,4 +1,4 @@
-function print_picking(instance, module){
+function picking_list_print_proxy(instance, module){
     var _t = instance.web._t,
         _lt = instance.web._lt;
     var QWeb = instance.web.qweb;
@@ -11,7 +11,6 @@ function print_picking(instance, module){
         },
 
         print_report: function(values){
-            console.log("Masuk 1")
             var self = this;
             var obj_users = new openerp.Model('res.users');
             var obj_proxy = new openerp.Model('proxy.backend');
@@ -38,7 +37,6 @@ function print_picking(instance, module){
         call_template: function(values, proxy){
             var self = this;
             proxy_ip = proxy;
-            console.log(proxy_ip);
             if (proxy_ip){
                 this.proxy_url = "http://"+ proxy_ip + ":8069"
                 this.proxy = new module.ProxyDevice(this);
@@ -52,8 +50,7 @@ function print_picking(instance, module){
                 });
             }
         },
-        print_picking: function(picking_ids) {
-            console.log("Masuk 2")
+        print_picking_list: function(picking_ids) {
             var self = this;
             var pickingModel = new instance.web.Model(this.model);
             pickingModel.call('export_for_printing',[picking_ids]).then(function(picking){
@@ -72,6 +69,6 @@ function print_picking(instance, module){
         this.picking_ids = []
         this.PrintPicking = new module.PrintPicking(this);
         if (context.context.picking_ids) this.picking_ids = context.context.picking_ids;
-        this.PrintPicking.print_picking(this.picking_ids);
+        this.PrintPicking.print_picking_list(this.picking_ids);
     };
 };
