@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="picking_list_print_proxy" inherit_id="web.assets_backend">
+          <xpath expr="." position="inside">
+              <script type="text/javascript" src="/picking_list_print_proxy/static/src/js/print.js" />
+              <script type="text/javascript" src="/picking_list_print_proxy/static/src/js/main.js" />
+          </xpath>
+        </template>
+
+        <record id="stock_picking_print_proxy_action" model="ir.actions.client">
+            <field name="name">Picking List Print Proxy Action</field>
+            <field name="tag">picking_list_print_proxy</field>
+            <field name="context">{'picking_ids': [active_id]}</field>
+        </record>
+
+    </data>
+</openerp>
