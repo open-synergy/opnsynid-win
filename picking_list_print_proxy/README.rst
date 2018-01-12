@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-============================
-Stock Picking Print By Proxy
-============================
+===========================
+Picking List Print By Proxy
+===========================
 
-Stock Picking Print By Proxy
+Picking List Print By Proxy
 
 Installation
 ============

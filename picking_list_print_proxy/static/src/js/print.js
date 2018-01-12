@@ -11,6 +11,7 @@ function print_picking(instance, module){
         },
 
         print_report: function(values){
+            console.log("Masuk 1")
             var self = this;
             var obj_users = new openerp.Model('res.users');
             var obj_proxy = new openerp.Model('proxy.backend');
@@ -37,12 +38,13 @@ function print_picking(instance, module){
         call_template: function(values, proxy){
             var self = this;
             proxy_ip = proxy;
+            console.log(proxy_ip);
             if (proxy_ip){
                 this.proxy_url = "http://"+ proxy_ip + ":8069"
                 this.proxy = new module.ProxyDevice(this);
                 this.proxy.connect(this.proxy_url)
                 *_.each(values,function(value){
-                    this.template = 'stock_picking_template'
+                    this.template = 'picking_list_template'
                     self.proxy.print_receipt(QWeb.render(this.template,{
                         receipt: value, widget: self,
                     }
@@ -51,6 +53,7 @@ function print_picking(instance, module){
             }
         },
         print_picking: function(picking_ids) {
+            console.log("Masuk 2")
             var self = this;
             var pickingModel = new instance.web.Model(this.model);
             pickingModel.call('export_for_printing',[picking_ids]).then(function(picking){
@@ -64,11 +67,10 @@ function print_picking(instance, module){
         },
     });
 
-    instance.web.client_actions.add('stock_picking_print_proxy', 'instance.stock_picking_print_proxy.action');
-    instance.stock_picking_print_proxy.action = function (instance, context) {
+    instance.web.client_actions.add('picking_list_print_proxy', 'instance.picking_list_print_proxy.action');
+    instance.picking_list_print_proxy.action = function (instance, context) {
         this.picking_ids = []
         this.PrintPicking = new module.PrintPicking(this);
-
         if (context.context.picking_ids) this.picking_ids = context.context.picking_ids;
         this.PrintPicking.print_picking(this.picking_ids);
     };
