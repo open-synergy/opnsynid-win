@@ -33,12 +33,22 @@ class StockPicking(models.Model):
         list_brand = []
         detail = []
         for move in self.move_lines:
+            product_brand = move.product_id and\
+                move.product_id.product_brand_id and\
+                move.product_id.product_brand_id.name or "-"
+            product_code = move.product_id and\
+                move.product_id.code or "-"
+            product_name = move.product_id and\
+                move.product_id.name or "-"
+            product_uom = move.product_uom and\
+                move.product_uom.name or "-"
+
             res_move = {
-                "product_brand": move.product_id and move.product_id.product_brand_id and move.product_id.product_brand_id.name or "-",
-                "product_code": move.product_id and move.product_id.code or "-",
-                "product_name": move.product_id and move.product_id.name or "-",
+                "product_brand": product_brand,
+                "product_code": product_code,
+                "product_name": product_name,
                 "product_qty": move.product_qty,
-                "product_uom": move.product_uom and move.product_uom.name or "-"
+                "product_uom": product_uom
             }
             if not list_brand:
                 list_brand.append(res_move["product_brand"])
@@ -48,11 +58,13 @@ class StockPicking(models.Model):
             picking_line.append(res_move)
         for brand in list_brand:
             dict_line = []
-            for elem in ifilter(lambda x: x['product_brand'] == brand, picking_line):
+            for elem in ifilter(
+                lambda x: x['product_brand'] == brand, picking_line
+            ):
                 dict_line.append(elem)
             res_detail = {
-                "brand":brand,
-                "detail":dict_line
+                "brand": brand,
+                "detail": dict_line
             }
             detail.append(res_detail)
         res_picking = {

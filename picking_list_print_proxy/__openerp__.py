@@ -18,7 +18,7 @@
     "data": [
         "views/stock_picking_print_proxy.xml"
     ],
-    'qweb':[
+    'qweb': [
         'static/src/xml/stock_picking_template.xml',
     ],
 }
